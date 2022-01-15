@@ -24,4 +24,11 @@ export class Board {
       .concat("X", this.board[0].slice(middleIndex + 1, this.width));
     this.board[0] = newFirstRow;
   }
+  tick() {
+    const middleIndex = Math.floor(this.width / 2);
+    this.board[0] = this.row;
+    this.board[1] = this.row
+      .slice(0, middleIndex)
+      .concat("X", this.row.slice(middleIndex + 1, this.width));
+  }
 }
