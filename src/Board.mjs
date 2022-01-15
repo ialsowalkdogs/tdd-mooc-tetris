@@ -5,6 +5,8 @@ export class Board {
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.middleIndex = Math.floor(this.width / 2);
+
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
   }
@@ -18,17 +20,16 @@ export class Board {
   }
 
   drop(block) {
-    const middleIndex = Math.floor(this.width / 2);
-    const newFirstRow = this.board[0]
-      .slice(0, middleIndex)
-      .concat("X", this.board[0].slice(middleIndex + 1, this.width));
+    const newFirstRow = this.row
+      .slice(0, this.middleIndex)
+      .concat("X", this.row.slice(this.middleIndex + 1, this.width));
     this.board[0] = newFirstRow;
   }
+
   tick() {
-    const middleIndex = Math.floor(this.width / 2);
     this.board[0] = this.row;
     this.board[1] = this.row
-      .slice(0, middleIndex)
-      .concat("X", this.row.slice(middleIndex + 1, this.width));
+      .slice(0, this.middleIndex)
+      .concat("X", this.row.slice(this.middleIndex + 1, this.width));
   }
 }
