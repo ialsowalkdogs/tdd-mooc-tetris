@@ -27,9 +27,7 @@ export class Board {
   }
 
   tick() {
+    this.board[1] = this.board[0];
     this.board[0] = this.row;
-    this.board[1] = this.row
-      .slice(0, this.middleIndex)
-      .concat("X", this.row.slice(this.middleIndex + 1, this.width));
   }
 }
