@@ -22,7 +22,7 @@ export class Board {
   drop(block) {
     const newFirstRow = this.row
       .slice(0, this.middleIndex)
-      .concat("X", this.row.slice(this.middleIndex + 1, this.width));
+      .concat(block.color, this.row.slice(this.middleIndex + 1, this.width));
     this.board[0] = newFirstRow;
   }
 
