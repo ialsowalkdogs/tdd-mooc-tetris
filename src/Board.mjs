@@ -20,6 +20,10 @@ export class Board {
   }
 
   drop(block) {
+    if (this.board[0] !== "...") {
+      throw new Error("already falling");
+    }
+
     const newFirstRow = this.row
       .slice(0, this.middleIndex)
       .concat(block.color, this.row.slice(this.middleIndex + 1, this.width));
