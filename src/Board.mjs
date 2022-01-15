@@ -16,4 +16,12 @@ export class Board {
     }
     return board;
   }
+
+  drop(block) {
+    const middleIndex = Math.floor(this.width / 2);
+    const newFirstRow = this.board[0]
+      .slice(0, middleIndex)
+      .concat("X", this.board[0].slice(middleIndex + 1, this.width));
+    this.board[0] = newFirstRow;
+  }
 }
