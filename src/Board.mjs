@@ -5,10 +5,15 @@ export class Board {
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.row = ".".repeat(this.width);
+    this.board = new Array(this.height).fill(this.row);
   }
 
   toString() {
-    const board = ".".repeat(this.width).concat("\n").repeat(this.height);
+    let board = "";
+    for (const row of this.board) {
+      board = board.concat(row, "\n");
+    }
     return board;
   }
 }
