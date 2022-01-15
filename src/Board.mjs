@@ -8,6 +8,7 @@ export class Board {
   }
 
   toString() {
-    return "TODO";
+    const board = ".".repeat(this.width).concat("\n").repeat(this.height);
+    return board;
   }
 }
