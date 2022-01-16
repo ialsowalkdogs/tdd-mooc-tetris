@@ -2,13 +2,13 @@ export class RotatingShape {
   shape;
 
   constructor(shape) {
-    this.shape = shape.split("\n     ");
+    this.shape = shape.split("\n     ").map((row) => row.split(""));
   }
 
   toString() {
     let shapeStr = "";
     for (const row of this.shape) {
-      shapeStr = shapeStr.concat(row, "\n");
+      shapeStr = shapeStr.concat(row.join(""), "\n");
     }
     return shapeStr;
   }
