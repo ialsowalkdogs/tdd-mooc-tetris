@@ -16,6 +16,9 @@ export class RotatingShape {
   }
 
   rotateLeft() {
-    throw new Error("Not implemented");
+    let shapeReverse = this.shape.map((row) => row.reverse());
+    return shapeReverse.map((val, index) =>
+      shapeReverse.map((row) => row[index]).reverse()
+    );
   }
 }
