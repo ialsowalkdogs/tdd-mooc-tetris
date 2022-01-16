@@ -25,11 +25,11 @@ export class Board {
   }
 
   drop(block) {
-    this.hasFallingBlocks = true;
-
-    if (this.board[0] !== "...") {
+    if (this.hasFallingBlocks) {
       throw new Error("already falling");
     }
+
+    this.hasFallingBlocks = true;
 
     const newFirstRow = this.row
       .slice(0, this.middleIndex)
