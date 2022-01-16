@@ -2,11 +2,15 @@ export class RotatingShape {
   shape;
 
   constructor(shape) {
-    this.shape = shape;
+    this.shape = shape.split("\n     ");
   }
 
   toString() {
-    throw new Error("Not implemented");
+    let shapeStr = "";
+    for (const row of this.shape) {
+      shapeStr = shapeStr.concat(row, "\n");
+    }
+    return shapeStr;
   }
 
   rotateRight() {
