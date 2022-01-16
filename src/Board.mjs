@@ -41,7 +41,10 @@ export class Board {
   }
 
   tick() {
-    if (this.currentBlockRow == this.height - 1) {
+    if (
+      this.currentBlockRow == this.height - 1 ||
+      this.board[this.currentBlockRow + 1] !== "..."
+    ) {
       this.hasFallingBlocks = false;
     }
 
