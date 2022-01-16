@@ -31,7 +31,12 @@ export class Board {
   }
 
   tick() {
-    this.board[1] = this.board[0];
-    this.board[0] = this.row;
+    for (let i = this.height - 1; i >= 0; i--) {
+      if (i == 0) {
+        this.board[i] = this.row;
+      } else {
+        this.board[i] = this.board[i - 1];
+      }
+    }
   }
 }
