@@ -9,6 +9,7 @@ export class Board {
 
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
+    this.hasFallingBlocks = false;
   }
 
   toString() {
@@ -19,7 +20,13 @@ export class Board {
     return board;
   }
 
+  hasFalling() {
+    return this.hasFallingBlocks;
+  }
+
   drop(block) {
+    this.hasFallingBlocks = true;
+
     if (this.board[0] !== "...") {
       throw new Error("already falling");
     }
