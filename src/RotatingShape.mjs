@@ -10,15 +10,19 @@ export class RotatingShape {
   }
 
   rotateRight() {
-    return this.shape.map((val, index) =>
+    const shapeRight = new RotatingShape(this.shape.toString());
+    shapeRight.shape = this.shape.map((val, index) =>
       this.shape.map((row) => row[index]).reverse()
     );
+    return shapeRight;
   }
 
   rotateLeft() {
+    const shapeLeft = new RotatingShape(this.shape.toString());
     let shapeReverse = this.shape.map((row) => row.reverse());
-    return shapeReverse.map((val, index) =>
-      shapeReverse.map((row) => row[index]).reverse()
+    shapeLeft.shape = shapeReverse.map((val, index) =>
+      shapeReverse.map((row) => row[index])
     );
+    return shapeLeft;
   }
 }
