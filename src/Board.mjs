@@ -31,10 +31,10 @@ export class Board {
 
     this.hasFallingBlocks = true;
 
-    const newFirstRow = this.row
+    const fallingRow = this.row
       .slice(0, this.middleIndex)
       .concat(block.color, this.row.slice(this.middleIndex + 1, this.width));
-    this.board[0] = newFirstRow;
+    this.board[0] = fallingRow;
   }
 
   tick() {
