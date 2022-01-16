@@ -6,15 +6,13 @@ export class RotatingShape {
   }
 
   toString() {
-    let shapeStr = "";
-    for (const row of this.shape) {
-      shapeStr = shapeStr.concat(row.join(""), "\n");
-    }
-    return shapeStr;
+    return this.shape.map((row) => row.join("").concat("\n")).join("");
   }
 
   rotateRight() {
-    throw new Error("Not implemented");
+    return this.shape.map((val, index) =>
+      this.shape.map((row) => row[index]).reverse()
+    );
   }
 
   rotateLeft() {

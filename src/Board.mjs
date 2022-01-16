@@ -15,11 +15,7 @@ export class Board {
   }
 
   toString() {
-    let board = "";
-    for (const row of this.board) {
-      board = board.concat(row, "\n");
-    }
-    return board;
+    return this.board.map((row) => row.concat("\n")).join("");
   }
 
   hasFalling() {
