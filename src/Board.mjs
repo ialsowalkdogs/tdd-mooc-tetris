@@ -41,13 +41,19 @@ export class Board {
   }
 
   tick() {
-    this.board[this.currentBlockRow + 1] = this.board[this.currentBlockRow];
-    if (this.currentBlockRow == 0) {
-      this.board[this.currentBlockRow] = this.row;
-    } else {
-      this.board[this.currentBlockRow] = this.board[this.currentBlockRow - 1];
+    if (this.currentBlockRow == this.height - 1) {
+      this.hasFallingBlocks = false;
     }
 
-    this.currentBlockRow += 1;
+    if (this.hasFallingBlocks) {
+      this.board[this.currentBlockRow + 1] = this.board[this.currentBlockRow];
+      if (this.currentBlockRow == 0) {
+        this.board[this.currentBlockRow] = this.row;
+      } else {
+        this.board[this.currentBlockRow] = this.board[this.currentBlockRow - 1];
+      }
+
+      this.currentBlockRow += 1;
+    }
   }
 }
