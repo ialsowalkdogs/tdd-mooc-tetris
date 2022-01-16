@@ -9,7 +9,9 @@ export class Board {
 
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
+
     this.hasFallingBlocks = false;
+    this.currentBlockRow = 0;
   }
 
   toString() {
@@ -35,15 +37,17 @@ export class Board {
       .slice(0, this.middleIndex)
       .concat(block.color, this.row.slice(this.middleIndex + 1, this.width));
     this.board[0] = fallingRow;
+    this.currentBlockRow = 0;
   }
 
   tick() {
-    for (let i = this.height - 1; i >= 0; i--) {
-      if (i == 0) {
-        this.board[i] = this.row;
-      } else {
-        this.board[i] = this.board[i - 1];
-      }
+    this.board[this.currentBlockRow + 1] = this.board[this.currentBlockRow];
+    if (this.currentBlockRow == 0) {
+      this.board[this.currentBlockRow] = this.row;
+    } else {
+      this.board[this.currentBlockRow] = this.board[this.currentBlockRow - 1];
     }
+
+    this.currentBlockRow += 1;
   }
 }
