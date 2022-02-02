@@ -1,7 +1,9 @@
 import { RotatingShape } from "./RotatingShape.mjs";
 
-export const Tetromino = {
-  T_SHAPE: new RotatingShape(`.T.
-TTT
-...`),
-};
+export class Tetromino extends RotatingShape {
+  constructor() {
+    super();
+  }
+
+  static T_SHAPE = ".T.\nTTT\n...\n";
+}
