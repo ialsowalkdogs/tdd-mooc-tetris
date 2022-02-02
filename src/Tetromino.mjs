@@ -1,9 +1,9 @@
 import { RotatingShape } from "./RotatingShape.mjs";
 
 export class Tetromino extends RotatingShape {
-  constructor() {
-    super();
+  constructor(shape) {
+    super(shape);
   }
 
-  static T_SHAPE = ".T.\nTTT\n...\n";
+  static T_SHAPE = new RotatingShape(".T.\nTTT\n...");
 }
