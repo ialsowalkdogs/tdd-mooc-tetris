@@ -5,5 +5,16 @@ export class Tetromino extends RotatingShape {
     super(shape);
   }
 
-  static T_SHAPE = new RotatingShape(".T.\nTTT\n...");
+  static T_SHAPE = new RotatingShape(
+    `.T.
+    TTT
+    ...`
+  );
+  static I_SHAPE = new RotatingShape(
+    `.....
+    .....
+    IIII.
+    .....
+    .....`
+  );
 }
