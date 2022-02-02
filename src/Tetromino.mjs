@@ -19,8 +19,29 @@ export class Tetromino extends RotatingShape {
     .....`
   );
 
+  static O_SHAPE = new Tetromino(
+    `.OO
+    .OO
+    ...`
+  );
+
   rotateLeft() {
-    if (this.shape === Tetromino.I_SHAPE.shape) return super.rotateRight();
-    else return super.rotateLeft();
+    switch (this.shape) {
+      case Tetromino.I_SHAPE.shape:
+        return super.rotateRight();
+      case Tetromino.O_SHAPE.shape:
+        return Tetromino.O_SHAPE;
+      default:
+        return super.rotateLeft();
+    }
+  }
+
+  rotateRight() {
+    switch (this.shape) {
+      case Tetromino.O_SHAPE.shape:
+        return Tetromino.O_SHAPE;
+      default:
+        return super.rotateRight();
+    }
   }
 }
