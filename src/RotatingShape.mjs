@@ -2,7 +2,7 @@ export class RotatingShape {
   shape;
 
   constructor(shape) {
-    this.shape = shape.split("\n     ").map((row) => row.split(""));
+    this.shape = shape.split(/\n\s*/).map((row) => row.split(""));
   }
 
   toString() {
