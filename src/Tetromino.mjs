@@ -26,10 +26,18 @@ export class Tetromino extends RotatingShape {
   );
 
   rotateLeft() {
-    switch (this.shape) {
-      case Tetromino.I_SHAPE.shape:
-        return super.rotateRight();
-      case Tetromino.O_SHAPE.shape:
+    switch (true) {
+      // If it has Is it's an I shape
+      // Ugliest shit ever... but works
+      case this.shape.some((row) => row.some((el) => el === "I")):
+        return new Tetromino(
+          `..I..
+          ..I..
+          ..I..
+          ..I..
+          .....`
+        );
+      case this.shape === Tetromino.O_SHAPE.shape:
         return Tetromino.O_SHAPE;
       default:
         return super.rotateLeft();
@@ -37,8 +45,16 @@ export class Tetromino extends RotatingShape {
   }
 
   rotateRight() {
-    switch (this.shape) {
-      case Tetromino.O_SHAPE.shape:
+    switch (true) {
+      case this.shape.some((row) => row.some((el) => el === "I")):
+        return new Tetromino(
+          `..I..
+          ..I..
+          ..I..
+          ..I..
+          .....`
+        );
+      case this.shape === Tetromino.O_SHAPE.shape:
         return Tetromino.O_SHAPE;
       default:
         return super.rotateRight();
