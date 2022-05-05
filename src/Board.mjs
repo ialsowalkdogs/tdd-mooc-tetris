@@ -63,7 +63,7 @@ export class Board {
       // Pad tetromino rows to shape
       const blockSplit = block.shape.map((blockRow) => padBlockRow(blockRow));
 
-      // Replace first Tetromino.height = no of rows with paddeds̄
+      // Replace first N of rows equal to Tetromino with padded Tetromino
       const blockHeight = blockSplit.length;
       this.board = blockSplit.concat(this.board.slice(blockHeight));
       this.currentBlockRow = 0;
@@ -72,8 +72,9 @@ export class Board {
 
   tick() {
     if (
+      // Last row
       this.currentBlockRow == this.height - 1 ||
-      this.board[this.currentBlockRow + 1] !== "..."
+      // Stop when there is something on the bottom
     ) {
       this.hasFallingBlocks = false;
     }
