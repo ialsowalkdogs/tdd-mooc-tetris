@@ -3,8 +3,23 @@ import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
 
 describe("Moving tetrominoes", () => {
+  let board;
+  beforeEach(() => {
+    board = new Board(10, 6);
+  });
+
   it("can be moved right", () => {
-    throw new Error("Test not implemented");
+    board.drop(Tetromino.T_SHAPE);
+    board.moveRight();
+
+    expect(board.toString()).to.equalShape(
+      `.....T....
+       ....TTT...
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
   });
 
   xit("can be moved left", () => {

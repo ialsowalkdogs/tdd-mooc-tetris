@@ -119,4 +119,29 @@ export class Board {
       this.currentBlockRow += 1;
     }
   }
+
+  moveRight() {
+    const rowsToMove = this.board.slice(
+      this.currentBlockRow,
+      this.currentBlockHeight
+    );
+    const newRows = rowsToMove.map((row) =>
+      ".".concat(row.slice(0, row.length - 1))
+    );
+
+    let startRows = this.board.slice(0, this.currentBlockRow);
+
+    const newBoard = startRows
+      // Add new rows
+      .concat(newRows)
+      // Add everything below
+      .concat(
+        this.board.slice(
+          this.currentBlockRow + this.currentBlockHeight,
+          this.board.length
+        )
+      );
+
+    this.board = newBoard;
+  }
 }
