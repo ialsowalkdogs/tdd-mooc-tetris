@@ -64,7 +64,11 @@ export class Board {
         return paddedRow;
       };
       // Pad tetromino rows to shape
-      const blockSplit = block.shape.map((blockRow) => padBlockRow(blockRow));
+      const blockSplit = block.shape
+        .map((blockRow) => padBlockRow(blockRow))
+        // Filter out rows that don't have tetromino symbols
+        // This will probably change once we rotate the tetrominos
+        .filter((row) => row !== this.row);
 
       // Replace first N of rows equal to Tetromino with padded Tetromino
       const blockHeight = blockSplit.length;
@@ -85,19 +89,24 @@ export class Board {
     }
 
     if (this.hasFallingBlocks) {
-      // const currentBlockRowEnd = this.currentBlockRow + this.currentBlockHeight;
-      // const blockRows = this.board.slice(
-      //   this.currentBlockRow,
-      //   currentBlockRowEnd
-      // );
-
-      // const newBoard = this.board
-      //   .slice(0, this.currentBlockRow)
-      //   .concat(this.row)
-      //   .concat(blockRows)
-      //   .concat(
-      //     this.board.slice(currentBlockRowEnd + 1, this.board.length - 2)
+      //   const currentBlockRowEnd =
+      //     this.currentBlockRow + this.currentBlockHeight;
+      //   const blockRows = this.board.slice(
+      //     this.currentBlockRow,
+      //     currentBlockRowEnd
       //   );
+
+      //   const newBoard = this.board
+      //     // All rows until current block
+      //     .slice(0, this.currentBlockRow)
+      //     // Add a row
+      //     .concat(this.row)
+      //     // Add the block
+      //     .concat(blockRows)
+      //     // Add everything below
+      //     .concat(this.board.slice(currentBlockRowEnd, this.board.length - 1));
+
+      //   this.board = newBoard;
 
       this.board[this.currentBlockRow + this.currentBlockHeight] =
         this.board[this.currentBlockRow];
