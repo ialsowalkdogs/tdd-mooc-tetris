@@ -11,6 +11,7 @@ export class Board {
     this.board = new Array(this.height).fill(this.row);
 
     this.hasFallingBlocks = false;
+    /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
     this.currentBlockHeight = 0;
   }
@@ -89,8 +90,9 @@ export class Board {
     }
 
     if (this.hasFallingBlocks) {
-      //   const currentBlockRowEnd =
-      //     this.currentBlockRow + this.currentBlockHeight;
+      /** Last row of Tetromino shape */
+         const currentBlockRowEnd =
+          this.currentBlockRow + this.currentBlockHeight;
       //   const blockRows = this.board.slice(
       //     this.currentBlockRow,
       //     currentBlockRowEnd
@@ -108,7 +110,7 @@ export class Board {
 
       //   this.board = newBoard;
 
-      this.board[this.currentBlockRow + this.currentBlockHeight] =
+      this.board[currentBlockRowEnd] =
         this.board[this.currentBlockRow];
       if (this.currentBlockRow == 0) {
         this.board[this.currentBlockRow] = this.row;
