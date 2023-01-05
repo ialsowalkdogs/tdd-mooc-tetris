@@ -81,14 +81,11 @@ export class Board {
 
   tick() {
     /** Last row of Tetromino shape */
-    const currentBlockRowEnd =
-    this.currentBlockRow + this.currentBlockHeight;
+    const currentBlockRowEnd = this.currentBlockRow + this.currentBlockHeight - 1;
 
     if (
-      // Last row
-      this.currentBlockRow == this.height - 1 ||
-      // Stop when there is something on the bottom
-      this.board[this.currentBlockRow + this.currentBlockHeight] !== this.row
+      // Next row is not empty or does not exist
+      this.board[currentBlockRowEnd + 1] !== this.row
     ) {
       this.hasFallingBlocks = false;
     }
@@ -96,7 +93,7 @@ export class Board {
     if (this.hasFallingBlocks) {
       const blockRows = this.board.slice(
         this.currentBlockRow,
-        currentBlockRowEnd
+        currentBlockRowEnd + 1
       );
       
       const newBlockStart = this.currentBlockRow + 1;
