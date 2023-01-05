@@ -99,10 +99,11 @@ export class Board {
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
 
-      const newBoard = new Board(this.width, this.height);
-      newBoard.board.splice(newBlockStart, this.currentBlockHeight, ...blockRows);
+      const newBoard = [...this.board];
+      newBoard[this.currentBlockRow] = this.row;
+      newBoard.splice(newBlockStart, this.currentBlockHeight, ...blockRows);
 
-      this.board = newBoard.board;
+      this.board = newBoard;
       this.currentBlockRow += 1;
     }
   }
