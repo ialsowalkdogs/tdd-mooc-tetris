@@ -80,6 +80,10 @@ export class Board {
   }
 
   tick() {
+    /** Last row of Tetromino shape */
+    const currentBlockRowEnd =
+    this.currentBlockRow + this.currentBlockHeight;
+
     if (
       // Last row
       this.currentBlockRow == this.height - 1 ||
@@ -90,34 +94,18 @@ export class Board {
     }
 
     if (this.hasFallingBlocks) {
-      /** Last row of Tetromino shape */
-         const currentBlockRowEnd =
-          this.currentBlockRow + this.currentBlockHeight;
-      //   const blockRows = this.board.slice(
-      //     this.currentBlockRow,
-      //     currentBlockRowEnd
-      //   );
+      const blockRows = this.board.slice(
+        this.currentBlockRow,
+        currentBlockRowEnd
+      );
+      
+      const newBlockStart = this.currentBlockRow + 1;
+      const newBlockEnd = currentBlockRowEnd + 1;
 
-      //   const newBoard = this.board
-      //     // All rows until current block
-      //     .slice(0, this.currentBlockRow)
-      //     // Add a row
-      //     .concat(this.row)
-      //     // Add the block
-      //     .concat(blockRows)
-      //     // Add everything below
-      //     .concat(this.board.slice(currentBlockRowEnd, this.board.length - 1));
+      const newBoard = new Board(this.width, this.height);
+      newBoard.board.splice(newBlockStart, this.currentBlockHeight, ...blockRows);
 
-      //   this.board = newBoard;
-
-      this.board[currentBlockRowEnd] =
-        this.board[this.currentBlockRow];
-      if (this.currentBlockRow == 0) {
-        this.board[this.currentBlockRow] = this.row;
-      } else {
-        this.board[this.currentBlockRow] = this.board[this.currentBlockRow - 1];
-      }
-
+      this.board = newBoard.board;
       this.currentBlockRow += 1;
     }
   }
@@ -170,5 +158,9 @@ export class Board {
       );
 
     this.board = newBoard;
+  }
+
+  moveDown() {
+    this.tick();
   }
 }
