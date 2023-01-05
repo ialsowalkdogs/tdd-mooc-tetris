@@ -22,8 +22,18 @@ describe("Moving tetrominoes", () => {
     );
   });
 
-  xit("can be moved left", () => {
-    throw new Error("Test not implemented");
+  it("can be moved left", () => {
+    board.drop(Tetromino.T_SHAPE);
+    board.moveLeft();
+
+    expect(board.toString()).to.equalShape(
+      `...T......
+       ..TTT.....
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
   });
 
   xit("can be moved down", () => {

@@ -146,4 +146,29 @@ export class Board {
 
     this.board = newBoard;
   }
+
+  moveLeft() {
+    const rowsToMove = this.board.slice(
+      this.currentBlockRow,
+      this.currentBlockHeight
+    );
+    const newRows = rowsToMove.map((row) =>
+      row.slice(1, row.length).concat('.')
+    );
+
+    let startRows = this.board.slice(0, this.currentBlockRow);
+
+    const newBoard = startRows
+      // Add new rows
+      .concat(newRows)
+      // Add everything below
+      .concat(
+        this.board.slice(
+          this.currentBlockRow + this.currentBlockHeight,
+          this.board.length
+        )
+      );
+
+    this.board = newBoard;
+  }
 }
