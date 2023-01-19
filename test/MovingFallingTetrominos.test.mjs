@@ -50,12 +50,40 @@ describe("Moving tetrominoes", () => {
     );
   });
 
-  xit("cannot be moved left beyond the board", () => {
-    throw new Error("Test not implemented");
+  it("cannot be moved left beyond the board", () => {
+    board.drop(Tetromino.T_SHAPE);
+    let i = 0;
+    while (i < 10) {
+      board.moveLeft();
+      i++;
+    }
+
+    expect(board.toString()).to.equalShape(
+      `.T........
+       TTT.......
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
   });
 
-  xit("cannot be moved right beyond the board", () => {
-    throw new Error("Test not implemented");
+  it("cannot be moved right beyond the board", () => {
+    board.drop(Tetromino.T_SHAPE);
+    let i = 0;
+    while (i < 10) {
+      board.moveRight();
+      i++;
+    }
+
+    expect(board.toString()).to.equalShape(
+      `........T.
+       .......TTT
+       ..........
+       ..........
+       ..........
+       ..........`
+       );
   });
 
   xit("cannot be moved down beyond the board (will stop falling)", () => {

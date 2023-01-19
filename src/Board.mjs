@@ -113,6 +113,11 @@ export class Board {
       this.currentBlockRow,
       this.currentBlockHeight
     );
+
+    const rowIsAtRightEdge = (row) => row[this.width - 1] !== '.';
+
+    if (rowsToMove.some(row => rowIsAtRightEdge(row))) return;
+
     const newRows = rowsToMove.map((row) =>
       ".".concat(row.slice(0, row.length - 1))
     );
@@ -138,6 +143,11 @@ export class Board {
       this.currentBlockRow,
       this.currentBlockHeight
     );
+
+    const rowIsAtLeftEdge = (row) => row[0] !== '.';
+
+    if (rowsToMove.some(row => rowIsAtLeftEdge(row))) return;
+
     const newRows = rowsToMove.map((row) =>
       row.slice(1, row.length).concat('.')
     );
