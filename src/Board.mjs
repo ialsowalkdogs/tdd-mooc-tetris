@@ -83,9 +83,32 @@ export class Board {
     /** Last row of Tetromino shape */
     const currentBlockRowEnd = this.currentBlockRow + this.currentBlockHeight - 1;
 
+    const getBlockRowIndices = (blockRow) => {
+      let indices = [];
+      for (let i = 0; i < blockRow.length; i++) {
+        if (blockRow[i] !== '.') {
+          indices.push(i);
+        }
+      }
+      return indices;
+    }
+
+    const hasOtherBlockBelow = () => {
+      const fallingLastRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd]);
+      const nextRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd + 1]);
+
+      if (nextRowIndices.some(index => fallingLastRowIndices.includes(index))) {
+        return true;
+      }
+      return false;
+    }
+
     if (
       // Next row is not empty or does not exist
-      this.board[currentBlockRowEnd + 1] !== this.row
+      this.board[currentBlockRowEnd + 1] === undefined || 
+      // There is a block directly under the falling block
+      hasOtherBlockBelow()
+
     ) {
       this.hasFallingBlocks = false;
     }
