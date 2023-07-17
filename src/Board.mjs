@@ -111,7 +111,7 @@ export class Board {
   moveRight() {
     const rowsToMove = this.board.slice(
       this.currentBlockRow,
-      this.currentBlockHeight
+      this.currentBlockRow + this.currentBlockHeight
     );
 
     const rowIsAtRightEdge = (row) => row[this.width - 1] !== '.';
@@ -141,7 +141,7 @@ export class Board {
   moveLeft() {
     const rowsToMove = this.board.slice(
       this.currentBlockRow,
-      this.currentBlockHeight
+      this.currentBlockRow + this.currentBlockHeight
     );
 
     const rowIsAtLeftEdge = (row) => row[0] !== '.';
