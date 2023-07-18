@@ -1,3 +1,5 @@
+import { range, getBlockRowIndices } from './utils.mjs';
+
 export class Board {
   width;
   height;
