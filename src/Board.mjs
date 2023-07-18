@@ -88,6 +88,9 @@ export class Board {
       this.currentBlockRow + this.currentBlockHeight - 1;
 
     const hasOtherBlockBelow = () => {
+      // If next row is empty, no need to calculate the rest
+      if (this.board[currentBlockRowEnd + 1] === this.row) return false;
+
       const fallingLastRowIndices = getBlockRowIndices(
         this.board[currentBlockRowEnd]
       );
@@ -104,7 +107,7 @@ export class Board {
     };
 
     if (
-      // Next row is not empty or does not exist
+      // Next row does not exist
       this.board[currentBlockRowEnd + 1] === undefined ||
       // There is a block directly under the falling block
       hasOtherBlockBelow()
@@ -122,7 +125,7 @@ export class Board {
         this.currentBlockHeight,
         this.currentBlockRow
       ).reverse();
-      let newRows =[];
+      let newRows = [];
       for (const row of fallingRange) {
         const tetrominoIndices = getBlockRowIndices(this.board[row]);
         const nextRow = row + 1;
