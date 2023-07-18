@@ -1,4 +1,4 @@
-import { range, getBlockRowIndices } from './utils.mjs';
+import { range, getBlockRowIndices } from "./utils.mjs";
 
 export class Board {
   width;
@@ -84,49 +84,64 @@ export class Board {
 
   tick() {
     /** Last row of Tetromino shape */
-    const currentBlockRowEnd = this.currentBlockRow + this.currentBlockHeight - 1;
+    const currentBlockRowEnd =
+      this.currentBlockRow + this.currentBlockHeight - 1;
 
     const hasOtherBlockBelow = () => {
-      const fallingLastRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd]);
-      const nextRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd + 1]);
+      const fallingLastRowIndices = getBlockRowIndices(
+        this.board[currentBlockRowEnd]
+      );
+      const nextRowIndices = getBlockRowIndices(
+        this.board[currentBlockRowEnd + 1]
+      );
 
-      if (nextRowIndices.some(index => fallingLastRowIndices.includes(index))) {
+      if (
+        nextRowIndices.some((index) => fallingLastRowIndices.includes(index))
+      ) {
         return true;
       }
       return false;
-    }
+    };
 
     if (
       // Next row is not empty or does not exist
-      this.board[currentBlockRowEnd + 1] === undefined || 
+      this.board[currentBlockRowEnd + 1] === undefined ||
       // There is a block directly under the falling block
       hasOtherBlockBelow()
     ) {
       this.hasFallingBlocks = false;
     }
 
-    if (this.hasFallingBlocks) {      
+    if (this.hasFallingBlocks) {
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
-
       const newBoard = [...this.board];
 
-      const fallingRange = range(this.currentBlockHeight, this.currentBlockRow).reverse();
-      // For every row of the falling tetromino
+      // Generate new rows by merging the tetromino into existing row content
+      const fallingRange = range(
+        this.currentBlockHeight,
+        this.currentBlockRow
+      ).reverse();
       let newRows = [];
       for (const row of fallingRange) {
         const tetrominoIndices = getBlockRowIndices(this.board[row]);
         const nextRow = row + 1;
 
-        // Generate new row by replacing indices of the next row with tetromino element
+        // Generate a single row by replacing indices of the next row with tetromino element
         const newRow = [...this.board[nextRow]].map((_, rowIndex) => {
-          return tetrominoIndices.includes(rowIndex) ? this.board[row][tetrominoIndices] : this.board[nextRow][rowIndex];
-        })
+          return tetrominoIndices.includes(rowIndex)
+            ? this.board[row][tetrominoIndices]
+            : this.board[nextRow][rowIndex];
+        });
         newRows.push(newRow.join(""));
       }
 
       newBoard[this.currentBlockRow] = this.row;
-      newBoard.splice(newBlockStart, this.currentBlockHeight, ...newRows.reverse());
+      newBoard.splice(
+        newBlockStart,
+        this.currentBlockHeight,
+        ...newRows.reverse()
+      );
 
       this.board = newBoard;
       this.currentBlockRow += 1;
@@ -139,9 +154,9 @@ export class Board {
       this.currentBlockRow + this.currentBlockHeight
     );
 
-    const rowIsAtRightEdge = (row) => row[this.width - 1] !== '.';
+    const rowIsAtRightEdge = (row) => row[this.width - 1] !== ".";
 
-    if (rowsToMove.some(row => rowIsAtRightEdge(row))) return;
+    if (rowsToMove.some((row) => rowIsAtRightEdge(row))) return;
 
     const newRows = rowsToMove.map((row) =>
       ".".concat(row.slice(0, row.length - 1))
@@ -169,12 +184,12 @@ export class Board {
       this.currentBlockRow + this.currentBlockHeight
     );
 
-    const rowIsAtLeftEdge = (row) => row[0] !== '.';
+    const rowIsAtLeftEdge = (row) => row[0] !== ".";
 
-    if (rowsToMove.some(row => rowIsAtLeftEdge(row))) return;
+    if (rowsToMove.some((row) => rowIsAtLeftEdge(row))) return;
 
     const newRows = rowsToMove.map((row) =>
-      row.slice(1, row.length).concat('.')
+      row.slice(1, row.length).concat(".")
     );
 
     let startRows = this.board.slice(0, this.currentBlockRow);

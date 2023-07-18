@@ -9,7 +9,7 @@ export function range(size, startAt = 0) {
 export function getBlockRowIndices(blockRow) {
   let indices = [];
   for (let i = 0; i < blockRow.length; i++) {
-    if (blockRow[i] !== '.') {
+    if (blockRow[i] !== ".") {
       indices.push(i);
     }
   }
