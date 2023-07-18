@@ -83,7 +83,7 @@ describe("Moving tetrominoes", () => {
        ..........
        ..........
        ..........`
-       );
+    );
   });
 
   it("cannot be moved down beyond the board (will stop falling)", () => {
@@ -101,11 +101,28 @@ describe("Moving tetrominoes", () => {
        ..........
        ....T.....
        ...TTT....`
-    )
+    );
   });
 
-  xit("cannot be moved left through other blocks", () => {
-    throw new Error("Test not implemented");
+  it("cannot be moved left through other blocks", () => {
+    board.drop(Tetromino.O_SHAPE);
+
+    let i = 0;
+    while (i < 10) {
+      board.moveLeft();
+      board.moveDown();
+      i++;
+    }
+
+    board.drop(Tetromino.T_SHAPE);
+
+    i = 0;
+    while (i < 10) {
+      board.moveDown();
+      i++;
+    }
+
+    console.log(board.toString());
   });
 
   xit("cannot be moved right through other blocks", () => {
