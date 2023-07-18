@@ -15,6 +15,7 @@ export class Board {
     this.hasFallingBlocks = false;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
+    /** How many rows are taken by a tetromino */
     this.currentBlockHeight = 0;
   }
 
@@ -85,16 +86,6 @@ export class Board {
     /** Last row of Tetromino shape */
     const currentBlockRowEnd = this.currentBlockRow + this.currentBlockHeight - 1;
 
-    const getBlockRowIndices = (blockRow) => {
-      let indices = [];
-      for (let i = 0; i < blockRow.length; i++) {
-        if (blockRow[i] !== '.') {
-          indices.push(i);
-        }
-      }
-      return indices;
-    }
-
     const hasOtherBlockBelow = () => {
       const fallingLastRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd]);
       const nextRowIndices = getBlockRowIndices(this.board[currentBlockRowEnd + 1]);
@@ -110,23 +101,32 @@ export class Board {
       this.board[currentBlockRowEnd + 1] === undefined || 
       // There is a block directly under the falling block
       hasOtherBlockBelow()
-
     ) {
       this.hasFallingBlocks = false;
     }
 
-    if (this.hasFallingBlocks) {
-      const blockRows = this.board.slice(
-        this.currentBlockRow,
-        currentBlockRowEnd + 1
-      );
-      
+    if (this.hasFallingBlocks) {      
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
 
       const newBoard = [...this.board];
+
+      const fallingRange = range(this.currentBlockHeight, this.currentBlockRow).reverse();
+      // For every row of the falling tetromino
+      let newRows = [];
+      for (const row of fallingRange) {
+        const tetrominoIndices = getBlockRowIndices(this.board[row]);
+        const nextRow = row + 1;
+
+        // Generate new row by replacing indices of the next row with tetromino element
+        const newRow = [...this.board[nextRow]].map((_, rowIndex) => {
+          return tetrominoIndices.includes(rowIndex) ? this.board[row][tetrominoIndices] : this.board[nextRow][rowIndex];
+        })
+        newRows.push(newRow.join(""));
+      }
+
       newBoard[this.currentBlockRow] = this.row;
-      newBoard.splice(newBlockStart, this.currentBlockHeight, ...blockRows);
+      newBoard.splice(newBlockStart, this.currentBlockHeight, ...newRows.reverse());
 
       this.board = newBoard;
       this.currentBlockRow += 1;
