@@ -122,7 +122,7 @@ export class Board {
         this.currentBlockHeight,
         this.currentBlockRow
       ).reverse();
-      let newRows = [];
+      let newRows =[];
       for (const row of fallingRange) {
         const tetrominoIndices = getBlockRowIndices(this.board[row]);
         const nextRow = row + 1;
@@ -130,7 +130,7 @@ export class Board {
         // Generate a single row by replacing indices of the next row with tetromino element
         const newRow = [...this.board[nextRow]].map((_, rowIndex) => {
           return tetrominoIndices.includes(rowIndex)
-            ? this.board[row][tetrominoIndices]
+            ? this.board[row][rowIndex]
             : this.board[nextRow][rowIndex];
         });
         newRows.push(newRow.join(""));
