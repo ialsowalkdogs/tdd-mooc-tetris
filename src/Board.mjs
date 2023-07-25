@@ -133,16 +133,36 @@ export class Board {
         this.currentBlockRow
       ).reverse();
       let newRows = [];
+      let tetrominoIndices = {};
+
       for (const row of fallingRange) {
-        const tetrominoIndices = getBlockRowIndices(this.board[row]);
+        tetrominoIndices = {
+          ...tetrominoIndices,
+          [row]: getBlockRowIndices(this.board[row]),
+        };
+      }
+
+      for (const row of fallingRange) {
         const nextRow = row + 1;
 
-        // Generate a single row by replacing indices of the next row with tetromino element
-        const newRow = [...this.board[nextRow]].map((_, rowIndex) => {
-          return tetrominoIndices.includes(rowIndex)
-            ? this.board[row][rowIndex]
-            : this.board[nextRow][rowIndex];
-        });
+        const mergeRows = (nextRowContent) => {
+          return nextRowContent.map((_, rowIndex) => {
+            return tetrominoIndices[row].includes(rowIndex)
+              ? this.board[row][rowIndex]
+              : nextRowContent[rowIndex];
+          });
+        };
+
+        let newRow;
+        if (Object.keys(tetrominoIndices).includes(nextRow.toString())) {
+          const rowWithReplaced = [...this.board[nextRow]].map((el, i) => {
+            return tetrominoIndices[nextRow].includes(i) ? "." : el;
+          });
+          newRow = mergeRows(rowWithReplaced);
+        } else {
+          // Generate a single row by replacing indices of the next row with tetromino element
+          newRow = mergeRows([...this.board[nextRow]]);
+        }
         newRows.push(newRow.join(""));
       }
 
