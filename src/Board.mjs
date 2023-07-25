@@ -56,8 +56,10 @@ export class Board {
       !hasOtherBlockBelow()
     ) {
       return true;
+    } else {
+      this.currentBlock = null;
+      return false;
     }
-    return false;
   }
 
   drop(block) {
@@ -123,7 +125,7 @@ export class Board {
 
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
-      const newBoard = [...this.board];
+      const newBoard = new Board(this.width, this.height);
 
       // Generate new rows by merging the tetromino into existing row content
       const fallingRange = range(
@@ -144,14 +146,14 @@ export class Board {
         newRows.push(newRow.join(""));
       }
 
-      newBoard[this.currentBlockRow] = this.row;
-      newBoard.splice(
+      newBoard.board[this.currentBlockRow] = this.row;
+      newBoard.board.splice(
         newBlockStart,
         this.currentBlockHeight,
         ...newRows.reverse()
       );
 
-      this.board = newBoard;
+      this.board = newBoard.board;
       this.currentBlockRow += 1;
     }
   }
