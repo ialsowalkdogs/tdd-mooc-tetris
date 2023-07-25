@@ -13,6 +13,7 @@ export class Board {
     this.board = new Array(this.height).fill(this.row);
 
     this.hasFallingBlocks = false;
+    this.currentBlock = null;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
     /** How many rows are taken by a tetromino */
@@ -24,11 +25,43 @@ export class Board {
   }
 
   hasFalling() {
-    return this.hasFallingBlocks;
+    if (this.currentBlock === null) return false;
+
+    const currentBlockRowEnd =
+      this.currentBlockRow + this.currentBlockHeight - 1;
+
+    const hasOtherBlockBelow = () => {
+      // If next row is empty, no need to calculate the rest
+      if (this.board[currentBlockRowEnd + 1] === this.row) return false;
+
+      const fallingLastRowIndices = getBlockRowIndices(
+        this.board[currentBlockRowEnd]
+      );
+      const nextRowIndices = getBlockRowIndices(
+        this.board[currentBlockRowEnd + 1]
+      );
+
+      if (
+        nextRowIndices.some((index) => fallingLastRowIndices.includes(index))
+      ) {
+        return true;
+      }
+      return false;
+    };
+
+    if (
+      // Next row exists
+      this.board[currentBlockRowEnd + 1] !== undefined &&
+      // There are no blocks directly under the falling block
+      !hasOtherBlockBelow()
+    ) {
+      return true;
+    }
+    return false;
   }
 
   drop(block) {
-    if (this.hasFallingBlocks) {
+    if (this.hasFalling()) {
       throw new Error("already falling");
     }
 
@@ -83,39 +116,11 @@ export class Board {
   }
 
   tick() {
-    /** Last row of Tetromino shape */
-    const currentBlockRowEnd =
-      this.currentBlockRow + this.currentBlockHeight - 1;
+    if (this.hasFalling()) {
+      /** Last row of Tetromino shape */
+      const currentBlockRowEnd =
+        this.currentBlockRow + this.currentBlockHeight - 1;
 
-    const hasOtherBlockBelow = () => {
-      // If next row is empty, no need to calculate the rest
-      if (this.board[currentBlockRowEnd + 1] === this.row) return false;
-
-      const fallingLastRowIndices = getBlockRowIndices(
-        this.board[currentBlockRowEnd]
-      );
-      const nextRowIndices = getBlockRowIndices(
-        this.board[currentBlockRowEnd + 1]
-      );
-
-      if (
-        nextRowIndices.some((index) => fallingLastRowIndices.includes(index))
-      ) {
-        return true;
-      }
-      return false;
-    };
-
-    if (
-      // Next row does not exist
-      this.board[currentBlockRowEnd + 1] === undefined ||
-      // There is a block directly under the falling block
-      hasOtherBlockBelow()
-    ) {
-      this.hasFallingBlocks = false;
-    }
-
-    if (this.hasFallingBlocks) {
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
       const newBoard = [...this.board];
