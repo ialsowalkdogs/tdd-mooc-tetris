@@ -70,14 +70,14 @@ export class Board {
     this.hasFallingBlocks = true;
     this.currentBlock = block;
 
-    if (block.color) {
+    if (typeof block === 'string') {
       // Shape is 1x1
       const fallingRow = this.row
         .slice(0, this.middleIndex)
-        .concat(block.color, this.row.slice(this.middleIndex + 1, this.width));
+        .concat(block, this.row.slice(this.middleIndex + 1, this.width));
       this.board[0] = fallingRow;
       this.currentBlockRow = 0;
-      this.currentBlockHeight = block.color.length;
+      this.currentBlockHeight = block.length;
     } else if (block.shape) {
       // Shape is a Tetromino
       const padBlockRow = (blockRow) => {
