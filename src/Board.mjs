@@ -70,7 +70,7 @@ export class Board {
     this.hasFallingBlocks = true;
     this.currentBlock = block;
 
-    if (typeof block === 'string') {
+    if (typeof block === "string") {
       // Shape is 1x1
       const fallingRow = this.row
         .slice(0, this.middleIndex)
@@ -118,64 +118,63 @@ export class Board {
   }
 
   tick() {
-    if (this.hasFalling()) {
-      /** Last row of Tetromino shape */
-      const currentBlockRowEnd =
-        this.currentBlockRow + this.currentBlockHeight - 1;
+    if (!this.hasFalling()) return;
+    /** Last row of Tetromino shape */
+    const currentBlockRowEnd =
+      this.currentBlockRow + this.currentBlockHeight - 1;
 
-      const newBlockStart = this.currentBlockRow + 1;
-      const newBlockEnd = currentBlockRowEnd + 1;
-      const newBoard = new Board(this.width, this.height);
+    const newBlockStart = this.currentBlockRow + 1;
+    const newBlockEnd = currentBlockRowEnd + 1;
+    const newBoard = new Board(this.width, this.height);
 
-      // Generate new rows by merging the tetromino into existing row content
-      const fallingRange = range(
-        this.currentBlockHeight,
-        this.currentBlockRow
-      ).reverse();
-      let newRows = [];
-      let tetrominoIndices = {};
+    // Generate new rows by merging the tetromino into existing row content
+    const fallingRange = range(
+      this.currentBlockHeight,
+      this.currentBlockRow
+    ).reverse();
+    let newRows = [];
+    let tetrominoIndices = {};
 
-      for (const row of fallingRange) {
-        tetrominoIndices = {
-          ...tetrominoIndices,
-          [row]: getBlockRowIndices(this.board[row]),
-        };
-      }
-
-      for (const row of fallingRange) {
-        const nextRow = row + 1;
-
-        const mergeRows = (nextRowContent) => {
-          return nextRowContent.map((_, rowIndex) => {
-            return tetrominoIndices[row].includes(rowIndex)
-              ? this.board[row][rowIndex]
-              : nextRowContent[rowIndex];
-          });
-        };
-
-        let newRow;
-        if (Object.keys(tetrominoIndices).includes(nextRow.toString())) {
-          const rowWithReplaced = [...this.board[nextRow]].map((el, i) => {
-            return tetrominoIndices[nextRow].includes(i) ? "." : el;
-          });
-          newRow = mergeRows(rowWithReplaced);
-        } else {
-          // Generate a single row by replacing indices of the next row with tetromino element
-          newRow = mergeRows([...this.board[nextRow]]);
-        }
-        newRows.push(newRow.join(""));
-      }
-
-      newBoard.board[this.currentBlockRow] = this.row;
-      newBoard.board.splice(
-        newBlockStart,
-        this.currentBlockHeight,
-        ...newRows.reverse()
-      );
-
-      this.board = newBoard.board;
-      this.currentBlockRow += 1;
+    for (const row of fallingRange) {
+      tetrominoIndices = {
+        ...tetrominoIndices,
+        [row]: getBlockRowIndices(this.board[row]),
+      };
     }
+
+    for (const row of fallingRange) {
+      const nextRow = row + 1;
+
+      const mergeRows = (nextRowContent) => {
+        return nextRowContent.map((_, rowIndex) => {
+          return tetrominoIndices[row].includes(rowIndex)
+            ? this.board[row][rowIndex]
+            : nextRowContent[rowIndex];
+        });
+      };
+
+      let newRow;
+      if (Object.keys(tetrominoIndices).includes(nextRow.toString())) {
+        const rowWithReplaced = [...this.board[nextRow]].map((el, i) => {
+          return tetrominoIndices[nextRow].includes(i) ? "." : el;
+        });
+        newRow = mergeRows(rowWithReplaced);
+      } else {
+        // Generate a single row by replacing indices of the next row with tetromino element
+        newRow = mergeRows([...this.board[nextRow]]);
+      }
+      newRows.push(newRow.join(""));
+    }
+
+    newBoard.board[this.currentBlockRow] = this.row;
+    newBoard.board.splice(
+      newBlockStart,
+      this.currentBlockHeight,
+      ...newRows.reverse()
+    );
+
+    this.board = newBoard.board;
+    this.currentBlockRow += 1;
   }
 
   moveRight() {
