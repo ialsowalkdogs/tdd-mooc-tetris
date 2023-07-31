@@ -11,7 +11,7 @@ export class Board {
 
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
-¯
+
     this.currentBlock = null;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
@@ -29,6 +29,7 @@ export class Board {
     const currentBlockRowEnd =
       this.currentBlockRow + this.currentBlockHeight - 1;
 
+    /** Checks if there are other blocks directly under falling block */
     const hasOtherBlockBelow = () => {
       // If next row is empty, no need to calculate the rest
       if (this.board[currentBlockRowEnd + 1] === this.row) return false;
@@ -51,7 +52,6 @@ export class Board {
     if (
       // Next row exists
       this.board[currentBlockRowEnd + 1] !== undefined &&
-      // There are no blocks directly under the falling block
       !hasOtherBlockBelow()
     ) {
       return true;
