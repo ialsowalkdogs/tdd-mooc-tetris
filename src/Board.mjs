@@ -11,8 +11,7 @@ export class Board {
 
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
-
-    this.hasFallingBlocks = false;
+¯
     this.currentBlock = null;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
@@ -67,7 +66,6 @@ export class Board {
       throw new Error("already falling");
     }
 
-    this.hasFallingBlocks = true;
     this.currentBlock = block;
 
     if (typeof block === "string") {
