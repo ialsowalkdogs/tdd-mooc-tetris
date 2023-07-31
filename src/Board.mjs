@@ -3,6 +3,10 @@ import { range, getBlockRowIndices } from "./utils.mjs";
 export class Board {
   width;
   height;
+  board;
+  fallingBlock;
+  currentBlockRow;
+  currentBlockHeight;
 
   constructor(width, height) {
     this.width = width;
@@ -12,7 +16,7 @@ export class Board {
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
 
-    this.currentBlock = null;
+    this.fallingBlock = null;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
     /** How many rows are taken by a tetromino */
@@ -24,41 +28,7 @@ export class Board {
   }
 
   hasFalling() {
-    if (this.currentBlock === null) return false;
-
-    const currentBlockRowEnd =
-      this.currentBlockRow + this.currentBlockHeight - 1;
-
-    /** Checks if there are other blocks directly under falling block */
-    const hasOtherBlockBelow = () => {
-      // If next row is empty, no need to calculate the rest
-      if (this.board[currentBlockRowEnd + 1] === this.row) return false;
-
-      const fallingLastRowIndices = getBlockRowIndices(
-        this.board[currentBlockRowEnd]
-      );
-      const nextRowIndices = getBlockRowIndices(
-        this.board[currentBlockRowEnd + 1]
-      );
-
-      if (
-        nextRowIndices.some((index) => fallingLastRowIndices.includes(index))
-      ) {
-        return true;
-      }
-      return false;
-    };
-
-    if (
-      // Next row exists
-      this.board[currentBlockRowEnd + 1] !== undefined &&
-      !hasOtherBlockBelow()
-    ) {
-      return true;
-    } else {
-      this.currentBlock = null;
-      return false;
-    }
+    return this.fallingBlock !== null;
   }
 
   drop(block) {
@@ -66,7 +36,7 @@ export class Board {
       throw new Error("already falling");
     }
 
-    this.currentBlock = block;
+    this.fallingBlock = block;
 
     if (typeof block === "string") {
       // Shape is 1x1
@@ -116,10 +86,15 @@ export class Board {
   }
 
   tick() {
-    if (!this.hasFalling()) return;
     /** Last row of Tetromino shape */
     const currentBlockRowEnd =
       this.currentBlockRow + this.currentBlockHeight - 1;
+
+    if (this.board[currentBlockRowEnd + 1] === undefined) {
+      this.fallingBlock = null;
+    }
+
+    if (!this.hasFalling()) return;
 
     const newBlockStart = this.currentBlockRow + 1;
     const newBlockEnd = currentBlockRowEnd + 1;
