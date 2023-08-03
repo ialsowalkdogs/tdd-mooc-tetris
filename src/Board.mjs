@@ -99,6 +99,7 @@ export class Board {
     const newBlockStart = this.currentBlockRow + 1;
     const newBlockEnd = currentBlockRowEnd + 1;
     const newBoard = new Board(this.width, this.height);
+    newBoard.board = [...this.board];
 
     // Generate new rows by merging the tetromino into existing row content
     const fallingRange = range(
@@ -142,7 +143,7 @@ export class Board {
     newBoard.board[this.currentBlockRow] = this.row;
     newBoard.board.splice(
       newBlockStart,
-      this.currentBlockHeight,
+      newBlockEnd,
       ...newRows.reverse()
     );
 
