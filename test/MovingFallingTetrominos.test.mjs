@@ -115,14 +115,25 @@ describe("Moving tetrominoes", () => {
     }
 
     board.drop(Tetromino.T_SHAPE);
-
     i = 0;
-    while (i < 10) {
+    while (i < 5) {
       board.moveDown();
       i++;
     }
+    i = 0;
+    while (i < 5) {
+      board.moveLeft();
+      i++;
+    }
 
-    console.log(board.toString());
+    expect(board.toString()).to.equalShape(
+      `..........
+       ..........
+       ..........
+       ..........
+       OO.T......
+       OOTTT.....`
+    );
   });
 
   xit("cannot be moved right through other blocks", () => {

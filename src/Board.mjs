@@ -143,7 +143,11 @@ export class Board {
       }
 
       newBoard.board[this.currentBlockRow] = this.row;
-      newBoard.board.splice(newBlockStart, this.currentBlockHeight, ...newRows.reverse());
+      newBoard.board.splice(
+        newBlockStart,
+        this.currentBlockHeight,
+        ...newRows.reverse()
+      );
 
       this.board = newBoard.board;
       this.currentBlockRow += 1;
