@@ -107,6 +107,7 @@ export class Board {
         this.currentBlockHeight,
         this.currentBlockRow
       ).reverse();
+
       let newRows = [];
       let tetrominoIndices = {};
 
@@ -142,7 +143,7 @@ export class Board {
       }
 
       newBoard.board[this.currentBlockRow] = this.row;
-      newBoard.board.splice(newBlockStart, newBlockEnd, ...newRows.reverse());
+      newBoard.board.splice(newBlockStart, this.currentBlockHeight, ...newRows.reverse());
 
       this.board = newBoard.board;
       this.currentBlockRow += 1;
