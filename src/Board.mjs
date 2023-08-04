@@ -153,6 +153,7 @@ export class Board {
       // If next row is empty, no need to calculate the rest
       if (this.board[currentBlockRowEnd + 1] === this.row) return false;
 
+      // FIXME: this will get all non-row elements including other blocks
       const fallingLastRowIndices = getBlockRowIndices(
         this.board[currentBlockRowEnd]
       );
