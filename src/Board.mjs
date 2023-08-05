@@ -11,7 +11,6 @@ export class Board {
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.middleIndex = Math.floor(this.width / 2);
 
     this.row = ".".repeat(this.width);
     this.board = new Array(this.height).fill(this.row);
@@ -37,12 +36,13 @@ export class Board {
     }
 
     this.fallingBlock = block;
+    const middleIndex = Math.floor(this.width / 2);
 
     if (typeof block === "string") {
       // Shape is 1x1
       const fallingRow = this.row
-        .slice(0, this.middleIndex)
-        .concat(block, this.row.slice(this.middleIndex + 1, this.width));
+        .slice(0, middleIndex)
+        .concat(block, this.row.slice(middleIndex + 1, this.width));
       this.board[0] = fallingRow;
       this.currentBlockRow = 0;
       this.currentBlockHeight = block.length;
@@ -54,7 +54,7 @@ export class Board {
           .concat(
             blockRow.join(""),
             this.row.slice(
-              this.middleIndex + Math.floor(blockRow.length / 2),
+              middleIndex + Math.floor(blockRow.length / 2),
               this.width
             )
           );
