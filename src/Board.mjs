@@ -1,10 +1,11 @@
-import { range, getBlockRowIndices } from "./utils.mjs";
+import { range, getBlockRowIndices, replaceAt } from "./utils.mjs";
 
 export class Board {
   width;
   height;
   board;
   fallingBlock;
+  blockCoordinates;
   currentBlockRow;
   currentBlockHeight;
 
@@ -16,10 +17,18 @@ export class Board {
     this.board = new Array(this.height).fill(this.row);
 
     this.fallingBlock = null;
+    /** Coordinates of the top left corner of the falling block
+     * Listed as [row, position]
+     */
+    this.blockCoordinates = null;
     /** Current row where the top of falling tetromino is */
     this.currentBlockRow = 0;
     /** How many rows are taken by a tetromino */
     this.currentBlockHeight = 0;
+  }
+
+  get blockHeight() {
+    return this.fallingBlock.length;
   }
 
   toString() {
@@ -40,10 +49,18 @@ export class Board {
 
     if (typeof block === "string") {
       // Shape is 1x1
-      const fallingRow = this.row
-        .slice(0, middleIndex)
-        .concat(block, this.row.slice(middleIndex + 1, this.width));
-      this.board[0] = fallingRow;
+      // Set block coordinates as middle of first row
+      // Replace board points at those coordinates
+
+      this.blockCoordinates = [0, middleIndex];
+      const newBoard = [...this.board];
+
+      newBoard[this.blockCoordinates[0]] = replaceAt(
+        newBoard[this.blockCoordinates[0]],
+        this.blockCoordinates[1],
+        block
+      );
+      this.board = newBoard;
       this.currentBlockHeight = block.length;
     } else if (block.shape) {
       // Shape is a Tetromino
