@@ -44,7 +44,6 @@ export class Board {
         .slice(0, middleIndex)
         .concat(block, this.row.slice(middleIndex + 1, this.width));
       this.board[0] = fallingRow;
-      this.currentBlockRow = 0;
       this.currentBlockHeight = block.length;
     } else if (block.shape) {
       // Shape is a Tetromino
@@ -80,9 +79,10 @@ export class Board {
       // Replace first N of rows equal to Tetromino with padded Tetromino
       const blockHeight = blockSplit.length;
       this.board = blockSplit.concat(this.board.slice(blockHeight));
-      this.currentBlockRow = 0;
       this.currentBlockHeight = blockHeight;
     }
+
+    this.currentBlockRow = 0;
   }
 
   tick() {
