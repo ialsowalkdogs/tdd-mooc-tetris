@@ -50,11 +50,10 @@ export class Board {
     if (typeof block === "string") {
       // Shape is 1x1
       // Set block coordinates as middle of first row
-      // Replace board points at those coordinates
-
       this.blockCoordinates = [0, middleIndex];
-      const newBoard = [...this.board];
 
+      // Replace board points at those coordinates
+      const newBoard = [...this.board];
       newBoard[this.blockCoordinates[0]] = replaceAt(
         newBoard[this.blockCoordinates[0]],
         this.blockCoordinates[1],
@@ -64,40 +63,26 @@ export class Board {
       this.currentBlockHeight = block.length;
     } else if (block.shape) {
       // Shape is a Tetromino
-      const padBlockRow = (blockRow) => {
-        const paddedRow = this.row
-          .slice(0, Math.ceil(blockRow.length / 2) + 1)
-          .concat(
-            blockRow.join(""),
-            this.row.slice(
-              middleIndex + Math.floor(blockRow.length / 2),
-              this.width
-            )
-          );
+      // Align middle of the tetromino with middle of the board
+      const tetrominoMiddle = Math.floor(block.shape[0].length / 2);
 
-        if (paddedRow.length > this.row.length) {
-          throw new Error(
-            `Too much padding for Tetromino: expected ${this.row.length}, got ${paddedRow.length}`
-          );
-        } else if (paddedRow.length < this.row.length) {
-          throw new Error(
-            `Too little padding for Tetromino: expected ${this.row.length}, got ${paddedRow.length}`
-          );
-        }
-        return paddedRow;
-      };
-      // Pad tetromino rows to shape
-      const blockSplit = block.shape
-        .map((blockRow) => padBlockRow(blockRow))
-        // Filter out rows that don't have tetromino symbols
-        // This will probably change once we rotate the tetrominos
-        .filter((row) => row !== this.row);
+      // Set block coordinates accordingly
+      this.blockCoordinates = [0, middleIndex - tetrominoMiddle - 1];
 
-      // Replace first N of rows equal to Tetromino with padded Tetromino
-      const blockHeight = blockSplit.length;
-      this.board = blockSplit.concat(this.board.slice(blockHeight));
-      this.currentBlockHeight = blockHeight;
-    }
+      // Replace board points at those coordinates for every row
+      const newBoard = [...this.board];
+      for (let i = 0; i < block.shape.length; i++) {
+        // For every row element, replace at those coordinates
+        block.shape[i].forEach((el, j) => {
+          newBoard[i] = replaceAt(
+            newBoard[i],
+            this.blockCoordinates[1] + j,
+            el
+          );
+        });
+      }
+      this.board = newBoard;
+    } else throw new Error("Unknown Tetromino shape");
 
     this.currentBlockRow = 0;
   }
