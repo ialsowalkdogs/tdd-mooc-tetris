@@ -47,20 +47,23 @@ export class Board {
     this.fallingBlock = block;
     const middleIndex = Math.floor(this.width / 2);
 
+    const createNewRow = (row, position, element) => {
+      const newRow = replaceAt(row, position, element);
+      return newRow;
+    };
+
+    const newBoard = [...this.board];
     if (typeof block === "string") {
       // Shape is 1x1
       // Set block coordinates as middle of first row
       this.blockCoordinates = [0, middleIndex];
 
       // Replace board points at those coordinates
-      const newBoard = [...this.board];
-      newBoard[this.blockCoordinates[0]] = replaceAt(
+      newBoard[this.blockCoordinates[0]] = createNewRow(
         newBoard[this.blockCoordinates[0]],
         this.blockCoordinates[1],
         block
       );
-      this.board = newBoard;
-      this.currentBlockHeight = block.length;
     } else if (block.shape) {
       // Shape is a Tetromino
       // Align middle of the tetromino with middle of the board
@@ -70,21 +73,21 @@ export class Board {
       this.blockCoordinates = [0, middleIndex - tetrominoMiddle - 1];
 
       // Replace board points at those coordinates for every row
-      const newBoard = [...this.board];
       for (let i = 0; i < block.shape.length; i++) {
         // For every row element, replace at those coordinates
         block.shape[i].forEach((el, j) => {
-          newBoard[i] = replaceAt(
+          newBoard[i] = createNewRow(
             newBoard[i],
             this.blockCoordinates[1] + j,
             el
           );
         });
       }
-      this.board = newBoard;
     } else throw new Error("Unknown Tetromino shape");
 
     this.currentBlockRow = 0;
+    this.currentBlockHeight = block.length;
+    this.board = newBoard;
   }
 
   tick() {
