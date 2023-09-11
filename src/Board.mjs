@@ -1,4 +1,9 @@
-import { range, getBlockRowIndices, replaceAt } from "./utils.mjs";
+import {
+  range,
+  getBlockRowIndices,
+  replaceAt,
+  createNewRow,
+} from "./utils.mjs";
 
 export class Board {
   width;
@@ -46,11 +51,6 @@ export class Board {
 
     this.fallingBlock = block;
     const middleIndex = Math.floor(this.width / 2);
-
-    const createNewRow = (row, position, element) => {
-      const newRow = replaceAt(row, position, element);
-      return newRow;
-    };
 
     const newBoard = [...this.board];
     if (typeof block === "string") {
@@ -104,57 +104,33 @@ export class Board {
     const moveBlockDown = () => {
       const newBlockStart = this.currentBlockRow + 1;
       const newBlockEnd = currentBlockRowEnd + 1;
-      const newBoard = new Board(this.width, this.height);
-      newBoard.board = [...this.board];
+      const newBoard = [...this.board];
 
-      // Generate new rows by merging the tetromino into existing row content
-      const fallingRange = range(
-        this.currentBlockHeight,
-        this.currentBlockRow
-      ).reverse();
-
-      let newRows = [];
-      let tetrominoIndices = {};
-
-      for (const row of fallingRange) {
-        tetrominoIndices = {
-          ...tetrominoIndices,
-          [row]: getBlockRowIndices(this.board[row]),
-        };
-      }
-
-      for (const row of fallingRange) {
-        const nextRow = row + 1;
-
-        const mergeRows = (nextRowContent) => {
-          return nextRowContent.map((_, rowIndex) => {
-            return tetrominoIndices[row].includes(rowIndex)
-              ? this.board[row][rowIndex]
-              : nextRowContent[rowIndex];
-          });
-        };
-
-        let newRow;
-        if (Object.keys(tetrominoIndices).includes(nextRow.toString())) {
-          const rowWithReplaced = [...this.board[nextRow]].map((el, i) => {
-            return tetrominoIndices[nextRow].includes(i) ? "." : el;
-          });
-          newRow = mergeRows(rowWithReplaced);
+      // Update block coordinates
+      const newCoordinates = [
+        (this.blockCoordinates[0] += 1),
+        this.blockCoordinates[1],
+      ];
+      // Shift tetromino one row down
+      for (let i = 0; i < this.currentBlockHeight; i++) {
+        if (typeof this.fallingBlock === "string") {
+          newBoard[newCoordinates[0]] = createNewRow(
+            newBoard[newCoordinates[0]],
+            newCoordinates[1],
+            this.fallingBlock
+          );
         } else {
-          // Generate a single row by replacing indices of the next row with tetromino element
-          newRow = mergeRows([...this.board[nextRow]]);
+          // For every row element, replace at those coordinates
+          this.fallingBlock.shape[i].forEach((el, j) => {
+            newBoard[i] = createNewRow(newBoard[i], newCoordinates[1] + j, el);
+          });
         }
-        newRows.push(newRow.join(""));
       }
+      // Clear previous row
+      newBoard[this.currentBlockRow] = this.row;
+      this.blockCoordinates = newCoordinates;
 
-      newBoard.board[this.currentBlockRow] = this.row;
-      newBoard.board.splice(
-        newBlockStart,
-        this.currentBlockHeight,
-        ...newRows.reverse()
-      );
-
-      this.board = newBoard.board;
+      this.board = newBoard;
       this.currentBlockRow += 1;
     };
 

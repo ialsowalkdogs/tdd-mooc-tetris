@@ -25,3 +25,8 @@ export function replaceAt(str, index, replacement) {
     str.substring(index + replacement.length)
   );
 }
+
+export function createNewRow(row, position, element) {
+  const newRow = replaceAt(row, position, element);
+  return newRow;
+}
