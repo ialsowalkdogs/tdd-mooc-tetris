@@ -86,7 +86,7 @@ export class Board {
     } else throw new Error("Unknown Tetromino shape");
 
     this.currentBlockRow = 0;
-    this.currentBlockHeight = block.length;
+    this.currentBlockHeight = block.shape ? block.shape.length : block.length;
     this.board = newBoard;
   }
 
