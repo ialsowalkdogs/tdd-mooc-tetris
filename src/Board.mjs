@@ -91,15 +91,17 @@ export class Board {
   }
 
   tick() {
-    /** Last row of Tetromino shape */
-    const currentBlockRowEnd =
-      this.currentBlockRow + this.currentBlockHeight - 1;
-
-    if (this.board[currentBlockRowEnd + 1] === undefined) {
+    if (
+      this.board[this.currentBlockRow + this.currentBlockHeight] === undefined
+    ) {
       this.fallingBlock = null;
     }
 
     if (!this.hasFalling()) return;
+
+    /** Last row of Tetromino shape */
+    const currentBlockRowEnd =
+      this.currentBlockRow + this.currentBlockHeight - 1;
 
     const moveBlockDown = () => {
       const newBlockStart = this.currentBlockRow + 1;
