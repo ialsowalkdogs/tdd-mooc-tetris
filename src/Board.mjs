@@ -33,7 +33,18 @@ export class Board {
   }
 
   get blockHeight() {
-    return this.fallingBlock.length;
+    return this.fallingBlock.shape.length;
+  }
+
+  get blockBoundaries() {
+    const rowRange = range(this.blockHeight, this.blockCoordinates[0]);
+    const columnRange = range(
+      this.fallingBlock.shape[0].length,
+      this.blockCoordinates[1]
+    );
+    return rowRange.reduce((acc, el) => {
+      return { ...acc, [el]: [...columnRange] };
+    }, {});
   }
 
   toString() {
@@ -104,8 +115,6 @@ export class Board {
       this.currentBlockRow + this.currentBlockHeight - 1;
 
     const moveBlockDown = () => {
-      const newBlockStart = this.currentBlockRow + 1;
-      const newBlockEnd = currentBlockRowEnd + 1;
       const newBoard = [...this.board];
 
       // Update block coordinates
@@ -139,6 +148,8 @@ export class Board {
     const hasOtherBlockBelow = () => {
       // If next row is empty, no need to calculate the rest
       if (this.board[currentBlockRowEnd + 1] === this.row) return false;
+
+      //
 
       // FIXME: this will get all non-row elements including other blocks
       const fallingLastRowIndices = getBlockRowIndices(
