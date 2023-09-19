@@ -107,7 +107,7 @@ export class Board {
       const newBoard = deepClone(this.board);
 
       // Update block coordinates
-      const newCoordinates = [
+      const [newRow, newColumn] = [
         (this.blockCoordinates[0] += 1),
         this.blockCoordinates[1],
       ];
@@ -116,15 +116,15 @@ export class Board {
         if (this.fallingBlock.shape) {
           // For every row element, replace at those coordinates
           this.fallingBlock.shape[i].forEach((el, j) => {
-            newBoard[i][newCoordinates[1] + j] = el;
+            newBoard[i][newColumn + j] = el;
           });
         } else {
-          newBoard[newCoordinates[0]][newCoordinates[1]] = this.fallingBlock;
+          newBoard[newRow][newColumn] = this.fallingBlock;
         }
       }
       // Clear previous row
       newBoard[this.currentBlockRow] = this.row;
-      this.blockCoordinates = newCoordinates;
+      this.blockCoordinates = [newRow, newColumn];
 
       this.board = newBoard;
       this.currentBlockRow += 1;
