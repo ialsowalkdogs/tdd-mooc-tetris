@@ -28,13 +28,16 @@ export class Board {
   }
 
   get blockHeight() {
-    return this.fallingBlock.shape.length;
+    return this.fallingBlock.length;
   }
 
   get blockBoundaries() {
+    if (typeof this.fallingBlock === "string")
+      return { [this.blockCoordinates[0]]: [this.blockCoordinates[1]] };
+
     const rowRange = range(this.blockHeight, this.blockCoordinates[0]);
     const columnRange = range(
-      this.fallingBlock.shape[0].length,
+      this.fallingBlock.length,
       this.blockCoordinates[1]
     );
     return rowRange.reduce((acc, el) => {
@@ -113,13 +116,13 @@ export class Board {
       ];
       // Shift tetromino one row down
       for (let i = 0; i < this.currentBlockHeight; i++) {
-        if (this.fallingBlock.shape) {
+        if (typeof this.fallingBlock === "string") {
+          newBoard[newRow][newColumn] = this.fallingBlock;
+        } else {
           // For every row element, replace at those coordinates
-          this.fallingBlock.shape[i].forEach((el, j) => {
+          this.fallingBlock[i].forEach((el, j) => {
             newBoard[i][newColumn + j] = el;
           });
-        } else {
-          newBoard[newRow][newColumn] = this.fallingBlock;
         }
       }
       // Clear previous row
@@ -137,9 +140,10 @@ export class Board {
       //
 
       // FIXME: this will get all non-row elements including other blocks
-      const fallingLastRowIndices = getBlockRowIndices(
-        this.board[currentBlockRowEnd]
-      );
+      const fallingLastRowIndices =
+        this.blockBoundaries[
+          String(Object.keys(this.blockBoundaries).length - 1)
+        ];
       const nextRowIndices = getBlockRowIndices(
         this.board[currentBlockRowEnd + 1]
       );
