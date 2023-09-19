@@ -1,9 +1,4 @@
-import {
-  range,
-  getBlockRowIndices,
-  replaceAt,
-  createNewRow,
-} from "./utils.mjs";
+import { range, getBlockRowIndices, deepClone } from "./utils.mjs";
 
 export class Board {
   width;
@@ -18,8 +13,8 @@ export class Board {
     this.width = width;
     this.height = height;
 
-    this.row = ".".repeat(this.width);
-    this.board = new Array(this.height).fill(this.row);
+    this.row = new Array(this.width).fill(".");
+    this.board = new Array(this.height).fill([...this.row]);
 
     this.fallingBlock = null;
     /** Coordinates of the top left corner of the falling block
@@ -48,7 +43,7 @@ export class Board {
   }
 
   toString() {
-    return this.board.map((row) => row.concat("\n")).join("");
+    return this.board.map((row) => row.join("").concat("\n")).join("");
   }
 
   hasFalling() {
@@ -60,22 +55,19 @@ export class Board {
       throw new Error("already falling");
     }
 
-    this.fallingBlock = block;
+    this.fallingBlock = block.shape ?? block;
     const middleIndex = Math.floor(this.width / 2);
 
-    const newBoard = [...this.board];
+    const newBoard = deepClone(this.board);
     if (typeof block === "string") {
       // Shape is 1x1
       // Set block coordinates as middle of first row
       this.blockCoordinates = [0, middleIndex];
+      const [row, column] = this.blockCoordinates;
 
       // Replace board points at those coordinates
-      newBoard[this.blockCoordinates[0]] = createNewRow(
-        newBoard[this.blockCoordinates[0]],
-        this.blockCoordinates[1],
-        block
-      );
-    } else if (block.shape) {
+      newBoard[row][column] = block;
+    } else {
       // Shape is a Tetromino
       // Align middle of the tetromino with middle of the board
       const tetrominoMiddle = Math.floor(block.shape[0].length / 2);
@@ -87,14 +79,10 @@ export class Board {
       for (let i = 0; i < block.shape.length; i++) {
         // For every row element, replace at those coordinates
         block.shape[i].forEach((el, j) => {
-          newBoard[i] = createNewRow(
-            newBoard[i],
-            this.blockCoordinates[1] + j,
-            el
-          );
+          newBoard[i][this.blockCoordinates[1] + j] = el;
         });
       }
-    } else throw new Error("Unknown Tetromino shape");
+    }
 
     this.currentBlockRow = 0;
     this.currentBlockHeight = block.shape ? block.shape.length : block.length;
@@ -127,14 +115,10 @@ export class Board {
         if (this.fallingBlock.shape) {
           // For every row element, replace at those coordinates
           this.fallingBlock.shape[i].forEach((el, j) => {
-            newBoard[i] = createNewRow(newBoard[i], newCoordinates[1] + j, el);
+            newBoard[i][newCoordinates[1] + j] = el;
           });
         } else {
-          newBoard[newCoordinates[0]] = createNewRow(
-            newBoard[newCoordinates[0]],
-            newCoordinates[1],
-            this.fallingBlock
-          );
+          newBoard[newCoordinates[0]][newCoordinates[1]] = this.fallingBlock;
         }
       }
       // Clear previous row

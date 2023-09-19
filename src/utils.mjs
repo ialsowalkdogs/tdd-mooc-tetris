@@ -16,17 +16,8 @@ export function getBlockRowIndices(blockRow) {
   return indices;
 }
 
-/** Replace character at given index in the string */
-export function replaceAt(str, index, replacement) {
-  if (index > str.length - 1) return str;
-  return (
-    str.substring(0, index) +
-    replacement +
-    str.substring(index + replacement.length)
-  );
-}
-
-export function createNewRow(row, position, element) {
-  const newRow = replaceAt(row, position, element);
-  return newRow;
+export function deepClone(array) {
+  return array.map((arr) => {
+    return arr.slice();
+  });
 }
