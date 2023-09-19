@@ -74,12 +74,13 @@ export class Board {
 
       // Set block coordinates accordingly
       this.blockCoordinates = [0, middleIndex - tetrominoMiddle - 1];
+      const [row, column] = this.blockCoordinates;
 
       // Replace board points at those coordinates for every row
       for (let i = 0; i < block.shape.length; i++) {
         // For every row element, replace at those coordinates
         block.shape[i].forEach((el, j) => {
-          newBoard[i][this.blockCoordinates[1] + j] = el;
+          newBoard[i][column + j] = el;
         });
       }
     }
@@ -103,7 +104,7 @@ export class Board {
       this.currentBlockRow + this.currentBlockHeight - 1;
 
     const moveBlockDown = () => {
-      const newBoard = [...this.board];
+      const newBoard = deepClone(this.board);
 
       // Update block coordinates
       const newCoordinates = [
