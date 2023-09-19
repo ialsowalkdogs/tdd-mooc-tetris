@@ -124,17 +124,17 @@ export class Board {
       ];
       // Shift tetromino one row down
       for (let i = 0; i < this.currentBlockHeight; i++) {
-        if (typeof this.fallingBlock === "string") {
+        if (this.fallingBlock.shape) {
+          // For every row element, replace at those coordinates
+          this.fallingBlock.shape[i].forEach((el, j) => {
+            newBoard[i] = createNewRow(newBoard[i], newCoordinates[1] + j, el);
+          });
+        } else {
           newBoard[newCoordinates[0]] = createNewRow(
             newBoard[newCoordinates[0]],
             newCoordinates[1],
             this.fallingBlock
           );
-        } else {
-          // For every row element, replace at those coordinates
-          this.fallingBlock.shape[i].forEach((el, j) => {
-            newBoard[i] = createNewRow(newBoard[i], newCoordinates[1] + j, el);
-          });
         }
       }
       // Clear previous row
